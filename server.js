@@ -1,3 +1,4 @@
+const path = require("path");
 /*
 应用的启动模块
 1. 通过express启动服务器
@@ -52,3 +53,10 @@ mongoose
   .catch((error) => {
     console.error("connect database failed", error);
   });
+
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static("public"));
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "public", "index.html"));
+  });
+}
