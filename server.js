@@ -20,7 +20,8 @@ const cookieParser = require("cookie-parser");
 app.use(cookieParser());
 // 声明使用路由器中间件
 const indexRouter = require("./routers");
-app.use("", indexRouter); //
+// app.use("/", indexRouter); //CM
+app.use("", indexRouter);
 
 const fs = require("fs");
 
@@ -42,7 +43,7 @@ app.use((req, res) => {
 
 // 通过mongoose连接数据库
 mongoose
-  .connect("mongodb://localhost/server_db2", { useNewUrlParser: true })
+  .connect(process.env.MONGODB_URI || "mongodb://localhost/server_db2", { useNewUrlParser: true })
   .then(() => {
     console.log("connect database successfully!!!");
     // 只有当连接上数据库后才去启动服务器
@@ -54,9 +55,10 @@ mongoose
     console.error("connect database failed", error);
   });
 
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static("public"));
-  app.get("*", (req, res) => {
-    res.sendFile(path.resolve(__dirname, "public", "index.html"));
-  });
-}
+// if (process.env.NODE_ENV === "production") {
+//   app.use(express.static("client/build"));
+
+//   app.get("*", (req, res) => {
+//     res.sendFile(path.join(__dirname, "client", "build", "index.html"));
+//   });
+// }
